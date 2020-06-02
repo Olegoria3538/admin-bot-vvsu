@@ -6,7 +6,13 @@ export interface DataType {
   main_questions: MainQuestion[]
   napravleniya: Napravleniya[]
   complete: boolean
+  activeMainTab: activeMainTabType
 }
+
+export type activeMainTabType =
+  | "направления"
+  | "все вопросы"
+  | "академическая степень"
 
 export interface SearhType {
   answer?: string

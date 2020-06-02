@@ -1,18 +1,33 @@
 import React from "react"
+import { Row, Container } from "react-grid-system"
 import styled from "styled-components"
-import { activeMainTabType } from "../type"
-import { ManipulateNapravlenie } from "../molecules/manipulate-napravlenie"
-import { ManipulateGeneralIssues } from "../molecules/manipulate-general-issues"
-import { ManipulateAcademLevels } from "../molecules/manipulate-academ-levels"
+import { useStore } from "effector-react"
+import { $answerGeneralIssues } from "../model/get-data"
 
-export const Manipulate: React.FC<{ activeMainTab: activeMainTabType }> = ({
-  activeMainTab,
-}) => {
-  if (activeMainTab === "направления") return <ManipulateNapravlenie />
-  if (activeMainTab === "все вопросы") return <ManipulateGeneralIssues />
-  if (activeMainTab === "академическая степень")
-    return <ManipulateAcademLevels />
-  return null
+export const ManipulateGeneralIssues = () => {
+  const answerGeneralIssues = useStore($answerGeneralIssues)
+  return (
+    <Container>
+      <Wrapper>
+        <Table>
+          <Row style={{ background: "#E5E5E5" }}>
+            <RowItem>
+              <TitleTable>Вопросы</TitleTable>
+            </RowItem>
+            <RowItem>
+              <TitleTable>Ответы</TitleTable>
+            </RowItem>
+          </Row>
+          {answerGeneralIssues.map((x) => (
+            <Row>
+              <RowItem>{x?.questions?.questions}</RowItem>
+              <RowItem>{x.answers}</RowItem>
+            </Row>
+          ))}
+        </Table>
+      </Wrapper>
+    </Container>
+  )
 }
 
 const Wrapper = styled.div`

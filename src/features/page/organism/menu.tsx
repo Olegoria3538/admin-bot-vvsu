@@ -2,13 +2,14 @@ import React from "react"
 import { Nav } from "../molecules/nav"
 import { Instrument } from "../molecules/instrument"
 import { Tabs } from "../molecules/tabs"
+import { DataType } from "../type"
 
-export const Menu = () => {
+export const Menu: React.FC<DataType> = ({ napravleniya, activeMainTab }) => {
   return (
     <>
-      <Nav />
+      <Nav data={activeMainTab} />
       <Instrument />
-      <Tabs />
+      {activeMainTab === "направления" && <Tabs data={napravleniya} />}
     </>
   )
 }

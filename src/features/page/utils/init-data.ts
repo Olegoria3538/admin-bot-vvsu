@@ -8,4 +8,5 @@ export const InitData: DataType = {
   main_questions: [{ question_id: "", questions: "" }],
   napravleniya: [{ napravleniya_id: "", stepen_id: "", napravleniya: "" }],
   complete: false,
+  activeMainTab: "направления",
 }

@@ -1,15 +1,32 @@
 import React from "react"
 import { Container } from "react-grid-system"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
+import { activeMainTabType } from "../type"
+import { mainTabSet } from "../model/get-data"
 
-export const Nav = () => {
+export const Nav: React.FC<{ data: activeMainTabType }> = ({ data }) => {
   return (
     <Wrapper>
       <Container>
         <Menu>
-          <MenuItem>ВОПРОСЫ-ОТВЕТЫ</MenuItem>
-          <MenuItem>ВОПРОСЫ-ОТВЕТЫ</MenuItem>
-          <MenuItem>ВОПРОСЫ-ОТВЕТЫ</MenuItem>
+          <MenuItem
+            active={data === "направления"}
+            onClick={() => mainTabSet("направления")}
+          >
+            ВОПРОСЫ-ОТВЕТЫ ПО НАПРАВЛЕНИЯМ
+          </MenuItem>
+          <MenuItem
+            active={data === "все вопросы"}
+            onClick={() => mainTabSet("все вопросы")}
+          >
+            ОБЩИЕ ВОПРОСЫ- ОБЩИЕ ОТВЕТЫ
+          </MenuItem>
+          <MenuItem
+            active={data === "академическая степень"}
+            onClick={() => mainTabSet("академическая степень")}
+          >
+            АКАДЕМ.СТЕПЕНЬ- НАПРАВЛЕНИЯ
+          </MenuItem>
         </Menu>
       </Container>
     </Wrapper>
@@ -25,7 +42,7 @@ const Menu = styled.div`
   display: flex;
 `
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ active?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,6 +55,12 @@ const MenuItem = styled.div`
   margin-right: 10px;
   border-right: 1px solid black;
   padding-right: 10px;
+  cursor: pointer;
+  ${({ active }) =>
+    active &&
+    css`
+      opacity: 0.5;
+    `}
   &:last-child {
     margin-right: 0;
     border-right: none;

@@ -1,21 +1,24 @@
 import React from "react"
 import { Container } from "react-grid-system"
 import styled, { css } from "styled-components"
+import { Napravleniya } from "../type"
+import { setNapravlenie, $napravlenie } from "../model/select-napravlenie"
+import { useStore } from "effector-react"
 
-export const Tabs = () => {
+export const Tabs: React.FC<{ data: Napravleniya[] }> = ({ data }) => {
+  const napravlenie = useStore($napravlenie)
   return (
     <Wrapper>
       <Container>
         <Menu>
-          <Item active={true}>
-            <span>,bv</span>
-          </Item>
-          <Item>
-            <span>,bv</span>
-          </Item>
-          <Item>
-            <span>,bv</span>
-          </Item>
+          {data.map((x) => (
+            <Item
+              active={napravlenie.napravleniya_id === x.napravleniya_id}
+              onClick={() => setNapravlenie(x)}
+            >
+              <span>{x.napravleniya}</span>
+            </Item>
+          ))}
         </Menu>
       </Container>
     </Wrapper>

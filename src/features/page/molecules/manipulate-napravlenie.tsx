@@ -1,18 +1,34 @@
 import React from "react"
+import { Row, Container } from "react-grid-system"
 import styled from "styled-components"
+import { useStore } from "effector-react"
+import { $answerNapravlenie } from "../model/get-data"
 import { activeMainTabType } from "../type"
-import { ManipulateNapravlenie } from "../molecules/manipulate-napravlenie"
-import { ManipulateGeneralIssues } from "../molecules/manipulate-general-issues"
-import { ManipulateAcademLevels } from "../molecules/manipulate-academ-levels"
 
-export const Manipulate: React.FC<{ activeMainTab: activeMainTabType }> = ({
-  activeMainTab,
-}) => {
-  if (activeMainTab === "направления") return <ManipulateNapravlenie />
-  if (activeMainTab === "все вопросы") return <ManipulateGeneralIssues />
-  if (activeMainTab === "академическая степень")
-    return <ManipulateAcademLevels />
-  return null
+export const ManipulateNapravlenie = () => {
+  const answerNapravlenie = useStore($answerNapravlenie)
+  return (
+    <Container>
+      <Wrapper>
+        <Table>
+          <Row style={{ background: "#E5E5E5" }}>
+            <RowItem>
+              <TitleTable>Вопросы</TitleTable>
+            </RowItem>
+            <RowItem>
+              <TitleTable>Ответы</TitleTable>
+            </RowItem>
+          </Row>
+          {answerNapravlenie.map((x) => (
+            <Row>
+              <RowItem>{x.section_answer}</RowItem>
+              <RowItem>{x.answers?.answer}</RowItem>
+            </Row>
+          ))}
+        </Table>
+      </Wrapper>
+    </Container>
+  )
 }
 
 const Wrapper = styled.div`
