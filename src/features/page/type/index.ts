@@ -9,6 +9,8 @@ export interface DataType {
   activeMainTab: activeMainTabType
 }
 
+export type instrumentType = "add" | "remove" | "edit" | null
+
 export type activeMainTabType =
   | "направления"
   | "все вопросы"

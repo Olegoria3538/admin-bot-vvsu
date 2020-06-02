@@ -1,14 +1,26 @@
-import React from "react"
+import React, { useState } from "react"
 import { Row, Container } from "react-grid-system"
-import styled from "styled-components"
 import { useStore } from "effector-react"
 import { $answerGeneralIssues } from "../model/get-data"
+import { Table, RowItem, TitleTable, WrapperManipulate } from "../common/ui"
+import { remove } from "../utils/remove"
+import { $instrument } from "../model/instrument"
 
 export const ManipulateGeneralIssues = () => {
   const answerGeneralIssues = useStore($answerGeneralIssues)
+  const [active, setActive] = useState<React.ReactText | null>(null)
+  const instrument = useStore($instrument)
+
+  const click = (id: React.ReactText) => {
+    if (!instrument) {
+      setActive(active === id ? null : id)
+    } else {
+      if (instrument === "remove") remove()
+    }
+  }
   return (
     <Container>
-      <Wrapper>
+      <WrapperManipulate>
         <Table>
           <Row style={{ background: "#E5E5E5" }}>
             <RowItem>
@@ -19,58 +31,24 @@ export const ManipulateGeneralIssues = () => {
             </RowItem>
           </Row>
           {answerGeneralIssues.map((x) => (
-            <Row>
-              <RowItem>{x?.questions?.questions}</RowItem>
-              <RowItem>{x.answers}</RowItem>
+            <Row onClick={() => click(x.question_id)}>
+              <RowItem preWrap={active === x.question_id}>
+                {x?.questions?.questions}
+              </RowItem>
+              <RowItem preWrap={active === x.question_id}>
+                {x.answers}{" "}
+                {x?.url ? (
+                  <a href={x.url} target="__blank">
+                    {x.url}
+                  </a>
+                ) : (
+                  ""
+                )}
+              </RowItem>
             </Row>
           ))}
         </Table>
-      </Wrapper>
+      </WrapperManipulate>
     </Container>
   )
 }
-
-const Wrapper = styled.div`
-  margin-top: 100px;
-`
-
-const Table = styled.div`
-  margin: auto;
-  border-radius: 5px;
-  border: 1px solid #828282;
-  max-width: 640px;
-  & > div {
-    margin: 0 !important;
-    border-bottom: 1px solid #828282;
-    &:last-child {
-      border-bottom: none;
-    }
-    transition: background-color 0.5s;
-    cursor: pointer;
-    &:hover {
-      background-color: #f6f8fa;
-    }
-  }
-`
-
-const RowItem = styled.div`
-  flex: 1;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  padding: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  &:first-child {
-    border-right: 1px solid #828282;
-  }
-`
-
-const TitleTable = styled.div`
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-`

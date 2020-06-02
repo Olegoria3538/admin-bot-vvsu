@@ -1,15 +1,36 @@
-import React from "react"
+import React, { useState } from "react"
 import { Row, Container } from "react-grid-system"
-import styled from "styled-components"
 import { useStore } from "effector-react"
 import { $answerNapravlenie } from "../model/get-data"
-import { activeMainTabType } from "../type"
+import { Table, RowItem, TitleTable, WrapperManipulate } from "../common/ui"
+import { $instrument } from "../model/instrument"
+import { remove } from "../utils/remove"
+import { editSetFormData } from "../model/edit.form"
 
 export const ManipulateNapravlenie = () => {
   const answerNapravlenie = useStore($answerNapravlenie)
+  const [active, setActive] = useState<React.ReactText | null>(null)
+  const instrument = useStore($instrument)
+  const click = ({
+    id,
+    question,
+    answer,
+  }: {
+    id: React.ReactText
+    question?: string
+    answer?: string
+  }) => {
+    if (!instrument) {
+      setActive(active === id ? null : id)
+    } else {
+      if (instrument === "remove") remove()
+      if (instrument === "edit")
+        editSetFormData({ open: true, question, answer })
+    }
+  }
   return (
     <Container>
-      <Wrapper>
+      <WrapperManipulate>
         <Table>
           <Row style={{ background: "#E5E5E5" }}>
             <RowItem>
@@ -20,58 +41,25 @@ export const ManipulateNapravlenie = () => {
             </RowItem>
           </Row>
           {answerNapravlenie.map((x) => (
-            <Row>
-              <RowItem>{x.section_answer}</RowItem>
-              <RowItem>{x.answers?.answer}</RowItem>
+            <Row
+              onClick={() =>
+                click({
+                  id: x.section_answer_id,
+                  question: x.section_answer,
+                  answer: x.answers?.answer,
+                })
+              }
+            >
+              <RowItem preWrap={active === x.section_answer_id}>
+                {x.section_answer}
+              </RowItem>
+              <RowItem preWrap={active === x.section_answer_id}>
+                {x.answers?.answer}
+              </RowItem>
             </Row>
           ))}
         </Table>
-      </Wrapper>
+      </WrapperManipulate>
     </Container>
   )
 }
-
-const Wrapper = styled.div`
-  margin-top: 100px;
-`
-
-const Table = styled.div`
-  margin: auto;
-  border-radius: 5px;
-  border: 1px solid #828282;
-  max-width: 640px;
-  & > div {
-    margin: 0 !important;
-    border-bottom: 1px solid #828282;
-    &:last-child {
-      border-bottom: none;
-    }
-    transition: background-color 0.5s;
-    cursor: pointer;
-    &:hover {
-      background-color: #f6f8fa;
-    }
-  }
-`
-
-const RowItem = styled.div`
-  flex: 1;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  padding: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  &:first-child {
-    border-right: 1px solid #828282;
-  }
-`
-
-const TitleTable = styled.div`
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-`
