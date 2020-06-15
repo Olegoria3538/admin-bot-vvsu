@@ -16,7 +16,7 @@ export const EditForm = () => {
   return (
     <>
       <Wrapper>
-        <H1>Добавить элемент</H1>
+        <H1>Редактировать элемент</H1>
         <Form
           onSubmit={onSubmit}
           initialValues={{
